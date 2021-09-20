@@ -77,7 +77,7 @@ WifiDriver::WifiDriver()
 		ret = nvs_flash_init();	
 	}
 	s_wifi_event_group = xEventGroupCreate();
-	tcpip_adapter_init();
+	//tcpip_adapter_init();
 	// esp_netif_init();
 	esp_event_loop_create_default();
 	// _hotstopNetif = netif_create_default_wifi_ap();
@@ -186,7 +186,7 @@ bool WifiDriver::Enable()
 		assert(nullptr);
 	}
 
-	esp_wifi_set_config(wifiMode, &wifi_config);
+	//esp_wifi_set_config(wifiMode, &wifi_config);
 
 	_isEnabled = true;
 
