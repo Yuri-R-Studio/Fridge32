@@ -1,57 +1,33 @@
 
-#ifndef HAL_PWM_H_
-#define HAL_PWM_H_
-#include <TimerInterruptHandler.h>
+#ifndef INCLUDE_HAL_SERVO_MOTOR_H_
+#define INCLUDE_HAL_SERVO_MOTOR_H_
+
 #include "HalCommon.h"
 #include "Gpio.h"
+#include "Timer.h"
+#include "driver/ledc.h"
 
 namespace Hal
 {
 
-class Pwm : TimerInterruptHandler::Callback
+class Pwm
 {
 public:
-	enum class PwmIndex : uint8_t
-	{
-		PWM0,
-		PWM1
-	};
 
-	Pwm(TimerInterruptHandler *itrpHandler, TimerSelect timerSelected, Gpio *gpio);
+	Pwm(Gpio *IoPins, Gpio::GpioIndex pin, ledc_channel_t channel, ledc_timer_t timer = LEDC_TIMER_0);
 	~Pwm();
-	void SetPin(PwmIndex pwm, Gpio::GpioIndex gpio);
-	void SetPwmFrequence(uint32_t freq);
-	void SetDutyCycle(PwmIndex pwm, uint32_t dutyCycle);
-	void StartPwm();
-	void StopPwm();
-	void Start(PwmIndex pwm);
-	void Stop(PwmIndex pwm);
-	void Restart();
-	void InterruptCallback();
+	void Init(uint32_t frequency = 50);
+	void SetDutyCycle(uint8_t percentage);
 
 private:
-	static constexpr uint32_t DutyCycleResolution = 100;
-	static constexpr uint8_t MaxPwmPins = 2;
-	TimerInterruptHandler *_itrpHandler;
-	TimerSelect _timerSelected;
+	static const uint16_t MaxResolution = 8192;
 	Gpio *_gpio;
-	enum class PwmStep : uint8_t
-	{
-		PeriodOn = 0,
-		PeriodOff = 1
-	};
-
-	struct PwmConfig
-	{
-		uint32_t DutyCycle = 0;
-		uint32_t DutyCycleCount = 0;
-		Gpio::GpioIndex GpioPin;
-		bool Enabled = false;
-	};
-
-	PwmConfig pwmPins[MaxPwmPins];
+	Gpio::GpioIndex _pin;
+	ledc_channel_config_t ledc_channel = {};
+	ledc_timer_config_t ledc_timer = {};
+	ledc_channel_t _channel;
+	ledc_timer_t _timer = {};
 };
-
 } // namespace Hal
 
-#endif /* HAL_PWM_H_ */
+#endif /* INCLUDE_HAL_LEDS_H_ */

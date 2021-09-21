@@ -25,7 +25,7 @@
 #include "Rmt.h"
 #include "I2c.h"
 #include "DeviceInput.h"
-#include "ServoMotor.h"
+#include "Pwm.h"
 #include "Laser.h"
 #include "WiiNunchuk.h"
 
@@ -51,13 +51,11 @@ public:
 	Flash &GetFlash() { return _flash; }
 	BankConfiguration &GetBunkConfiguration() { return _bankConfig; }
 	Spi &GetSpi() { return _spi; }
-	Timer &GetTimer0() { return _timer0; }
-	Timer &GetTimer1() { return _timer1; }
 	Adc &GetAdc() { return _adc; }
 	I2c &GetI2c() { return _i2c; }
 	DeviceInput& GetDeviceInput() { return _deviceInput; }
 	Adafruit_SSD1306& GetDisplay() { return _display; }
-	ServoMotor &GetMotorY() { return _motor1; }
+	Pwm &GetBuzzer() { return _buzzer; }
 
 	uint32_t Milliseconds();
 	void TimerCallback();
@@ -99,14 +97,11 @@ private:
 	WifiDriver _wifiDriver;
 	Flash _flash;
 	BankConfiguration _bankConfig;
-	TimerInterruptHandler _timerInterruptHandler;
-	Timer _timer0;
-	Timer _timer1;
 	I2c _i2c;
 	DeviceInput _deviceInput;
 	Spi _spi;
 	Adafruit_SSD1306 _display;
-	ServoMotor _motor1;
+	Pwm _buzzer;
 };
 } // namespace Hal
 

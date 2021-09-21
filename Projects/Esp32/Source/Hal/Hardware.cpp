@@ -21,14 +21,11 @@ Hardware::Hardware() :	_gpio(),
 						_wifiDriver(),
 						_flash(),
 						_bankConfig(),
-						_timerInterruptHandler(),
-						_timer0(&_timerInterruptHandler, TimerSelect::Timer0),
-						_timer1(&_timerInterruptHandler, TimerSelect::Timer1),
 						_i2c(&_gpio, Hal::I2cPort::I2c0, Gpio::GpioIndex::Gpio22, Gpio::GpioIndex::Gpio21),
 						_deviceInput(&_gpio, &_adc),
 						_spi(),
 						_display(SSD1306_LCDWIDTH, SSD1306_LCDHEIGHT, &_i2c),
-						_motor1(&_gpio, Gpio::GpioIndex::Gpio17, LEDC_CHANNEL_0)
+						_buzzer(&_gpio, Gpio::GpioIndex::Gpio2, LEDC_CHANNEL_0)
 {
 	esp_chip_info(&_mcuInfo);
 	esp_base_mac_addr_get(_macAdrress.data());
@@ -68,11 +65,15 @@ Hardware::Hardware() :	_gpio(),
 #endif
 	// _spiffs.Mount();
 
-	_gpio.ConfigOutput(Gpio::GpioIndex::Gpio12, Gpio::OutputType::PullUp);
+	//_gpio.ConfigOutput(Gpio::GpioIndex::Gpio12, Gpio::OutputType::PullUp);
 	_gpio.Set(Gpio::GpioIndex::Gpio12);
-	vTaskDelay(500);
-	//_gpio.Reset(Gpio::GpioIndex::Gpio12);
+	// vTaskDelay(500);
+	_gpio.Reset(Gpio::GpioIndex::Gpio12);
 	// initializing display
+	_buzzer.Init(2000);
+	_buzzer.SetDutyCycle(50);
+	vTaskDelay(500);
+	_buzzer.SetDutyCycle(0);
 	_display.begin(SSD1306_SWITCHCAPVCC, 0x3C, false, false);
 	_display.clearDisplay();
 	_display.setTextSize(2);

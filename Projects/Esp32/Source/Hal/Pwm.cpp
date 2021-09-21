@@ -1,115 +1,54 @@
 
+#include "HalCommon.h"
 #include "Pwm.h"
+#include "Dwt.h"
+#include "string.h"
 
 namespace Hal
 {
 
-Pwm::Pwm(TimerInterruptHandler *itrpHandler, TimerSelect timerSelected, Gpio *gpio) : _itrpHandler(itrpHandler), _timerSelected(timerSelected), _gpio(gpio)
+Pwm::Pwm(Gpio *IoPins, Gpio::GpioIndex pin, ledc_channel_t channel, ledc_timer_t timer) : 
+		_gpio(IoPins), _pin(pin), _channel(channel), _timer(timer)
 {
-	switch (timerSelected)
-	{
-	case TimerSelect::Timer0:
-		this->Preemption = Hal::Preemption::TIMER0;
-		break;
-	case TimerSelect::Timer1:
-		this->Preemption = Hal::Preemption::TIMER1;
-		break;
-	}
-
-	this->AutoReload = false;
-	this->Frequency = 1;
-
-	_itrpHandler->SetCallback(this);
-	_itrpHandler->SetFrequency(this);
-
-	for (auto &pin : pwmPins)
-	{
-		pin.DutyCycle = 0;
-		pin.DutyCycleCount = 0;
-		pin.Enabled = false;
-	}
 }
 
 Pwm::~Pwm()
 {
 }
 
-// TO-DO implement remove pin
-void Pwm::SetPin(PwmIndex pwm, Gpio::GpioIndex gpio)
+void Pwm::Init(uint32_t frequency)
 {
-	_gpio->SetMode(gpio, Gpio::Mode::Output);
-	_gpio->Reset(gpio);
-	pwmPins[static_cast<uint8_t>(pwm)].GpioPin = gpio;
-	_gpio->SetAlternate(gpio, Gpio::AltFunc::Pwm);
+	ledc_timer.duty_resolution = LEDC_TIMER_13_BIT; // resolution of PWM duty
+	ledc_timer.freq_hz = frequency;                      // frequency of PWM signal
+	ledc_timer.speed_mode = LEDC_LOW_SPEED_MODE;           // timer mode
+	ledc_timer.timer_num = _timer;            // timer index
+	ledc_timer.clk_cfg = LEDC_AUTO_CLK;              // Auto select the source clock
+
+    ledc_timer_config(&ledc_timer);
+
+    // Prepare and set configuration of timer1 for low speed channels
+    ledc_timer.speed_mode = LEDC_HIGH_SPEED_MODE;
+    ledc_timer.timer_num = _timer;
+    ledc_timer_config(&ledc_timer);
+
+	ledc_channel.channel    = _channel;
+	ledc_channel.duty       = 0;
+	ledc_channel.gpio_num   = static_cast<gpio_num_t>(_pin);
+	ledc_channel.speed_mode = LEDC_HIGH_SPEED_MODE;
+	ledc_channel.hpoint     = 0;
+	ledc_channel.timer_sel  = _timer;
+	ledc_channel_config(&ledc_channel);
 }
 
-void Pwm::SetPwmFrequence(uint32_t freq)
+void Pwm::SetDutyCycle(uint8_t percentage)
 {
-	this->Frequency = freq * DutyCycleResolution;
-	printf("Frequency: %u\n", this->Frequency);
-	_itrpHandler->SetFrequency(this);
-	Restart();
+	if (percentage > 100)
+		percentage = 100;
+	
+	uint32_t timePosition = (MaxResolution * percentage) / 100;
+
+	ledc_set_duty(ledc_channel.speed_mode, ledc_channel.channel, timePosition);
+	ledc_update_duty(ledc_channel.speed_mode, ledc_channel.channel);
 }
 
-void Pwm::SetDutyCycle(PwmIndex pwm, uint32_t dutyCycle)
-{
-	pwmPins[static_cast<uint8_t>(pwm)].DutyCycle = dutyCycle;
-	pwmPins[static_cast<uint8_t>(pwm)].DutyCycleCount = 0;
-	//printf("Duty set at %u\n", pwmPins[static_cast<uint8_t>(pwm)].DutyCycle);
-}
-
-void Pwm::StartPwm()
-{
-	_itrpHandler->Enable(this);
-	for (auto &pin : pwmPins)
-	{
-		if (pin.Enabled)
-			_gpio->Reset(pin.GpioPin);
-	}
-}
-
-void Pwm::StopPwm()
-{
-	_itrpHandler->Disable(this->Preemption);
-	for (auto &pin : pwmPins)
-	{
-		if (pin.Enabled)
-			_gpio->Reset(pin.GpioPin);
-	}
-}
-
-void Pwm::Start(PwmIndex pwm)
-{
-	pwmPins[static_cast<uint8_t>(pwm)].Enabled = true;
-	pwmPins[static_cast<uint8_t>(pwm)].DutyCycleCount = 0;
-	_gpio->Reset(pwmPins[static_cast<uint8_t>(pwm)].GpioPin);
-}
-
-void Pwm::Stop(PwmIndex pwm)
-{
-	pwmPins[static_cast<uint8_t>(pwm)].Enabled = false;
-	pwmPins[static_cast<uint8_t>(pwm)].DutyCycleCount = 0;
-	_gpio->Reset(pwmPins[static_cast<uint8_t>(pwm)].GpioPin);
-}
-
-void Pwm::Restart()
-{
-	StartPwm();
-	StopPwm();
-}
-
-void Pwm::InterruptCallback()
-{
-	for (auto &pin : pwmPins)
-	{
-		if (pin.Enabled)
-		{
-			if (pin.DutyCycleCount > pin.DutyCycle)
-				_gpio->Reset(pin.GpioPin);
-			else
-				_gpio->Set(pin.GpioPin);
-			pin.DutyCycleCount = (pin.DutyCycleCount > DutyCycleResolution) ? 0 : pin.DutyCycleCount + 1;
-		}
-	}
-}
 } // namespace Hal

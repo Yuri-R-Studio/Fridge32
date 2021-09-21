@@ -11,7 +11,7 @@ namespace Applications
 using Hal::TimeLimit;
 using Hal::Hardware;
 using Hal::WiiNunchuk;
-using Hal::ServoMotor;
+using Hal::Pwm;
 using Hal::DeviceInput;
 using Hal::Laser;
 using Hal::Rng;
@@ -33,8 +33,8 @@ private:
     uint8_t _remoteY = 0;       
 	bool _runningWithController = true;
     WiiNunchuk* _wiiNunchuk;
-    ServoMotor* _motorY;
-    ServoMotor* _motorX;
+    Pwm* _motorY;
+    Pwm* _motorX;
     Rng* _rng;
 
     enum class LaserRoundEffectStateMachine : uint8_t
