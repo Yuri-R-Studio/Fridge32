@@ -52,7 +52,7 @@ public:
 private:
     static const uint16_t InputCount = MaxAnalogInputs + MaxDigitalInputs;
     array <InputStatus, InputCount> _inputList;
-    InputType StaticInputConfig [InputCount] = {InputType::Digital, InputType::Digital,
+    InputType StaticInputConfig [InputCount] = {InputType::Digital,
                                                              InputType::Analog,  InputType::Analog};
 private:
     /// @brief	Hide Copy constructor.

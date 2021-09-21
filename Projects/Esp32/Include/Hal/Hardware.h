@@ -54,14 +54,10 @@ public:
 	Timer &GetTimer0() { return _timer0; }
 	Timer &GetTimer1() { return _timer1; }
 	Adc &GetAdc() { return _adc; }
-	Rmt &GetRmt(){ return _rmt; }
 	I2c &GetI2c() { return _i2c; }
 	DeviceInput& GetDeviceInput() { return _deviceInput; }
 	Adafruit_SSD1306& GetDisplay() { return _display; }
 	ServoMotor &GetMotorY() { return _motor1; }
-	ServoMotor &GetMotorX() { return _motor2; }
-	Laser &GetLaser() { return _laser; }
-	WiiNunchuk &GetController() { return _wiiNunchuk; }
 
 	uint32_t Milliseconds();
 	void TimerCallback();
@@ -106,16 +102,11 @@ private:
 	TimerInterruptHandler _timerInterruptHandler;
 	Timer _timer0;
 	Timer _timer1;
-	Rmt _rmt;
-	Rmt _rmt2;
 	I2c _i2c;
 	DeviceInput _deviceInput;
 	Spi _spi;
 	Adafruit_SSD1306 _display;
 	ServoMotor _motor1;
-	ServoMotor _motor2;
-	Laser _laser;
-	WiiNunchuk _wiiNunchuk; 
 };
 } // namespace Hal
 

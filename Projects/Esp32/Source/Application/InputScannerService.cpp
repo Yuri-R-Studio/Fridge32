@@ -25,9 +25,8 @@ void InputScannerService::Run()
 	
 	// Gathering low laywer references
 	DeviceInput& deviceInput = Hal::Hardware::Instance()->GetDeviceInput();
-	WiiNunchuk& controller = Hal::Hardware::Instance()->GetController();
 
-	// Getting input and controller Status
+	// Getting input Status
 	InputStatusList& inputList = StatusAgent::Instance()->GetInputStatusList();
 
 	for(;;)

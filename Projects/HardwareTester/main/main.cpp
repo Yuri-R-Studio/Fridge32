@@ -29,6 +29,7 @@ extern "C" void app_main(void)
 
 	while (1)
 	{
+		vTaskDelay(200);
 		// executetMenu(test);
 		// test = ReadKey();
 	}

@@ -24,16 +24,11 @@ Hardware::Hardware() :	_gpio(),
 						_timerInterruptHandler(),
 						_timer0(&_timerInterruptHandler, TimerSelect::Timer0),
 						_timer1(&_timerInterruptHandler, TimerSelect::Timer1),
-						_rmt(&_gpio, Gpio::GpioIndex::Gpio18, RmtChannel::RmtChannel0, Hal::BitsPerLed * Hal::MaxAddressableLeds, Hal::BitsPerLed),
-						_rmt2(&_gpio, Gpio::GpioIndex::Gpio5, RmtChannel::RmtChannel1, Hal::BitsPerLed * Hal::MaxAddressableLeds, Hal::BitsPerLed),
-						_i2c(&_gpio, Hal::I2cPort::I2c0, Gpio::GpioIndex::Gpio15, Gpio::GpioIndex::Gpio16),
+						_i2c(&_gpio, Hal::I2cPort::I2c0, Gpio::GpioIndex::Gpio22, Gpio::GpioIndex::Gpio21),
 						_deviceInput(&_gpio, &_adc),
 						_spi(),
 						_display(SSD1306_LCDWIDTH, SSD1306_LCDHEIGHT, &_i2c),
-						_motor1(&_gpio, Gpio::GpioIndex::Gpio18, LEDC_CHANNEL_0),
-						_motor2(&_gpio, Gpio::GpioIndex::Gpio5, LEDC_CHANNEL_1),
-						_laser(&_gpio, Gpio::GpioIndex::Gpio17, LEDC_CHANNEL_2),
-						_wiiNunchuk(&_i2c, 0x52)
+						_motor1(&_gpio, Gpio::GpioIndex::Gpio17, LEDC_CHANNEL_0)
 {
 	esp_chip_info(&_mcuInfo);
 	esp_base_mac_addr_get(_macAdrress.data());
@@ -66,26 +61,25 @@ Hardware::Hardware() :	_gpio(),
 	if (_pHardware == nullptr)
 		_pHardware = this;
 	else
-		printf("!!! Error: Only one instance of System can be created !!!\n");
+		printf("!!! Error: Only one instance of Hardware can be created !!!\n");
 
 #ifdef HARDWARE_TESTER
 	_i2c.ScanDevices();
 #endif
 	// _spiffs.Mount();
-	
+
+	_gpio.ConfigOutput(Gpio::GpioIndex::Gpio12, Gpio::OutputType::PullUp);
+	_gpio.Set(Gpio::GpioIndex::Gpio12);
+	vTaskDelay(500);
+	//_gpio.Reset(Gpio::GpioIndex::Gpio12);
 	// initializing display
 	_display.begin(SSD1306_SWITCHCAPVCC, 0x3C, false, false);
 	_display.clearDisplay();
 	_display.setTextSize(2);
 	_display.setTextColor(WHITE);
 	_display.setCursor(0,0);
-	_display.print("  Dog WII");
+	_display.print("Fridge 32");
 	_display.display();
-	
-	_motor1.Init();
-	_motor2.Init();
-	_laser.Init();
-	_laser.SetPower(30);	
 }
 
 uint32_t Hardware::GetSystemClockBase()
