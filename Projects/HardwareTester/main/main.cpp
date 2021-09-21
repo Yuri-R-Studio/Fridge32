@@ -18,19 +18,53 @@
 #include "Tests.h"
 #include "Rng.h"
 #include <cstring>
+#include "StatusAgent.h"
+#include "ApplicationAgent.h"
+#include "ConfigurationAgent.h"
+#include "TimeLimit.h"
 
 #include "Adafruit_GFX.h"
 #include "Adafruit_SSD1306.h"
 
+using Applications::ApplicationAgent;
+using Status::StatusAgent;
+using Configuration::ConfigurationAgent;
+using Hal::Hardware;
+using Utilities::Logger;
+
 extern "C" void app_main(void)
 {
-	Hal::Hardware::Instance();
+	Hal::Hardware* hardware = Hal::Hardware::Instance();
+	// Initialize Status Agent
+	StatusAgent::Instance()->Initialize();
+	ApplicationAgent::Instance()->Initialize();
+	ApplicationAgent::Instance()->GetInputScannerService()->Start();
+	Status::InputStatus& switchTest = StatusAgent::Instance()->GetInputStatusList().GetInput(Configuration::InputIndex::SwitchDefault);
+	Status::InputStatus& pot = StatusAgent::Instance()->GetInputStatusList().GetInput(Configuration::InputIndex::Potenciometer);
+	Status::InputStatus& feedbackV = StatusAgent::Instance()->GetInputStatusList().GetInput(Configuration::InputIndex::VoltageFeedBack);
+	
  	printf("Hardware Tester for ESP32\n");
+	vTaskDelay(1000);
+	hardware->GetDisplay().setTextSize(1);
+
+	Hal::TimeLimit timeUpdate = {};
 
 	while (1)
 	{
-		vTaskDelay(200);
-		// executetMenu(test);
-		// test = ReadKey();
+		vTaskDelay(1000);
+		if (timeUpdate.IsTimeUp(1000))
+		{
+			timeUpdate.Reset();
+			hardware->GetDisplay().clearDisplay();
+			hardware->GetDisplay().setCursor(0,0);
+			hardware->GetDisplay().print("Switch is %s\n",
+											(switchTest.GetDigitalLevel()) ? "On" : "Off");
+			hardware->GetDisplay().print("Potenciometer: %lu\n", pot.GetAnalogLevel());
+			hardware->GetDisplay().print("Volt feedback: %lu\n", feedbackV.GetAnalogLevel());
+			hardware->GetDisplay().display();
+		}
+
+		if (switchTest.GetDigitalLevel())
+			hardware->PlayBuzzer();
 	}
 }

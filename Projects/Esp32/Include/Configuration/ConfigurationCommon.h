@@ -14,9 +14,8 @@ namespace Configuration
     // Static Input Configuration Index
     enum class InputIndex : uint8_t
     {
-        ButtonOk,
-        ButtonBack,
-        PotLaserPower,
-        PotLaserDelay
+        SwitchDefault,
+        Potenciometer,
+        VoltageFeedBack
     };
 } // namespace Common

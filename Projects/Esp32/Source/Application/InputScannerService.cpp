@@ -34,17 +34,14 @@ void InputScannerService::Run()
 		DelayUntil(100);
 
 		// Read physical input and save in the status list
-		inputList.GetInput(Configuration::InputIndex::ButtonBack).
-			SetDigitalLevel(deviceInput.GetDigitalInput(DigitalInputIndex::UserButtonReturn));
+		inputList.GetInput(Configuration::InputIndex::SwitchDefault).
+			SetDigitalLevel(deviceInput.GetDigitalInput(DigitalInputIndex::SwitchDefault));
 
-		inputList.GetInput(Configuration::InputIndex::ButtonOk).
-			SetDigitalLevel(deviceInput.GetDigitalInput(DigitalInputIndex::UserButtonEnter));	
-
-		inputList.GetInput(Configuration::InputIndex::PotLaserDelay).
-			SetAnalogLevel(deviceInput.GetAnalogInput(AnalogInputIndex::LaserDelay));	
+		inputList.GetInput(Configuration::InputIndex::Potenciometer).
+			SetAnalogLevel(deviceInput.GetAnalogInput(AnalogInputIndex::Potenciometer));	
 			
-		inputList.GetInput(Configuration::InputIndex::PotLaserPower).
-			SetAnalogLevel(deviceInput.GetAnalogInput(AnalogInputIndex::LaserPower));			
+		inputList.GetInput(Configuration::InputIndex::VoltageFeedBack).
+			SetAnalogLevel(deviceInput.GetAnalogInput(AnalogInputIndex::VoltageFeedBack));			
 	}
 }
 

@@ -28,8 +28,8 @@ private:
 	
 	Gpio::GpioIndex analogIndex[MaxAnalogInputs] =
 	{
-		Gpio::GpioIndex::Gpio4,
-		Gpio::GpioIndex::Gpio15
+		Gpio::GpioIndex::Gpio15,
+		Gpio::GpioIndex::Gpio4
 	};
 	
 	Adc::AdcIndex analogAdcIndex[MaxAnalogInputs] = {};

@@ -27,7 +27,10 @@
                 "${workspaceFolder}/../Esp32/Libraries/**",
                 "${workspaceFolder}/../Esp32/Libraries/freertos-addons/Source/include",
                 "${env:IDF_TOOLS}/**",
-                "${env:IDF_PATH}/components/**"
+                "${env:IDF_PATH}/components/**",
+                "F:/YuriCode/Fridge32/Projects/Esp32/Include/Status",
+                "F:/YuriCode/Fridge32/Projects/Esp32/Include/Protocol",
+                "F:/YuriCode/Fridge32/Projects/Esp32/Include/Common"
             ],
             "defines": [],
             "cStandard": "c11",

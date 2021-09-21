@@ -24,7 +24,7 @@ void LaserControlService::Run()
 
 	// // Initializing the pointers
 	// _wiiNunchuk = &Hardware::Instance()->GetController();
-	// _motorY = &Hardware::Instance()->GetMotorY();
+	// _motorY = &Hardware::Instance()->GetBuzzer();
     // _motorX = &Hardware::Instance()->GetMotorX();
 	// _rng = &Hardware::Instance()->GetRng();
 

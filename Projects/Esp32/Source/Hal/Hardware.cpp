@@ -70,9 +70,9 @@ Hardware::Hardware() :	_gpio(),
 	// vTaskDelay(500);
 	_gpio.Reset(Gpio::GpioIndex::Gpio12);
 	// initializing display
-	_buzzer.Init(2000);
+	_buzzer.Init(6000);
 	_buzzer.SetDutyCycle(50);
-	vTaskDelay(500);
+	vTaskDelay(100);
 	_buzzer.SetDutyCycle(0);
 	_display.begin(SSD1306_SWITCHCAPVCC, 0x3C, false, false);
 	_display.clearDisplay();

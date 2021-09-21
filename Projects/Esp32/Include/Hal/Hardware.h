@@ -57,6 +57,13 @@ public:
 	Adafruit_SSD1306& GetDisplay() { return _display; }
 	Pwm &GetBuzzer() { return _buzzer; }
 
+	inline void PlayBuzzer()
+	{
+		_buzzer.SetDutyCycle(50);
+		vTaskDelay(100);
+		_buzzer.SetDutyCycle(0);
+	}
+
 	uint32_t Milliseconds();
 	void TimerCallback();
 	ResetReason GetResetReason();

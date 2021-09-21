@@ -19,14 +19,13 @@ static constexpr uint8_t MaxAnalogInputs = 2;
 
 enum class DigitalInputIndex : uint8_t
 {
-	UserButtonEnter,
-	UserButtonReturn,
+	SwitchDefault,
 };
 
 enum class AnalogInputIndex : uint8_t
 {
-	LaserPower,
-	LaserDelay,
+	Potenciometer,
+    VoltageFeedBack
 };
 
 enum class RmtProtocolSupported : uint8_t
