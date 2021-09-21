@@ -39,6 +39,7 @@ extern "C" void app_main(void)
 	StatusAgent::Instance()->Initialize();
 	ApplicationAgent::Instance()->Initialize();
 	ApplicationAgent::Instance()->GetInputScannerService()->Start();
+	ApplicationAgent::Instance()->GetLedStatusService()->Start();
 	Status::InputStatus& switchTest = StatusAgent::Instance()->GetInputStatusList().GetInput(Configuration::InputIndex::SwitchDefault);
 	Status::InputStatus& pot = StatusAgent::Instance()->GetInputStatusList().GetInput(Configuration::InputIndex::Potenciometer);
 	Status::InputStatus& feedbackV = StatusAgent::Instance()->GetInputStatusList().GetInput(Configuration::InputIndex::VoltageFeedBack);

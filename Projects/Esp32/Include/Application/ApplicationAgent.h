@@ -6,6 +6,7 @@
 #include "LaserControlService.h"
 #include "MenuService.h"
 #include "InputScannerService.h"
+#include "LedStatusService.h"
 
 namespace Applications
 {
@@ -29,11 +30,13 @@ public:
     LaserControlService* GetLaserControlService() { return _laserControlService; }
     MenuService* GetMenuService() { return _menuService; }
     InputScannerService* GetInputScannerService() { return _inputScanner; }
+    LedStatusService* GetLedStatusService() { return _ledStatusService; }
 
 private:
     static ApplicationAgent *_applications;
     LaserControlService * _laserControlService;
     MenuService * _menuService;
+    LedStatusService * _ledStatusService;
     InputScannerService * _inputScanner;
 
 private:

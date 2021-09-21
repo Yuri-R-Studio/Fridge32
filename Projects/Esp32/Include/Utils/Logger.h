@@ -29,6 +29,7 @@ public:
 		LaserController,
 		Menu,
 		InputScanner,
+		LedService,
 		Unknown = 255
 	};
 

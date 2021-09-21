@@ -64,6 +64,14 @@ public:
 		_buzzer.SetDutyCycle(0);
 	}
 
+	inline void SetStatusLed(bool set)
+	{
+		if (set)
+			_gpio.Set(Gpio::GpioIndex::Gpio13);
+		else
+			_gpio.Reset(Gpio::GpioIndex::Gpio13);
+	}
+
 	uint32_t Milliseconds();
 	void TimerCallback();
 	ResetReason GetResetReason();

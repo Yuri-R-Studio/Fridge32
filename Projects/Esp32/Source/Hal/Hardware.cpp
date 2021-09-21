@@ -65,10 +65,10 @@ Hardware::Hardware() :	_gpio(),
 #endif
 	// _spiffs.Mount();
 
-	//_gpio.ConfigOutput(Gpio::GpioIndex::Gpio12, Gpio::OutputType::PullUp);
-	_gpio.Set(Gpio::GpioIndex::Gpio12);
+	_gpio.ConfigOutput(Gpio::GpioIndex::Gpio13, Gpio::OutputType::PullUp);
+	_gpio.Set(Gpio::GpioIndex::Gpio13);
 	// vTaskDelay(500);
-	_gpio.Reset(Gpio::GpioIndex::Gpio12);
+	_gpio.Reset(Gpio::GpioIndex::Gpio13);
 	// initializing display
 	_buzzer.Init(6000);
 	_buzzer.SetDutyCycle(50);
