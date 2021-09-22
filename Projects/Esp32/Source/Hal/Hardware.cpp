@@ -25,7 +25,8 @@ Hardware::Hardware() :	_gpio(),
 						_deviceInput(&_gpio, &_adc),
 						_spi(),
 						_display(SSD1306_LCDWIDTH, SSD1306_LCDHEIGHT, &_i2c),
-						_buzzer(&_gpio, Gpio::GpioIndex::Gpio2, LEDC_CHANNEL_0)
+						_buzzer(&_gpio, Gpio::GpioIndex::Gpio2, LEDC_CHANNEL_0),
+						_mosfetOutput(&_gpio, Gpio::GpioIndex::Gpio17, LEDC_CHANNEL_1, LEDC_TIMER_1, LEDC_TIMER_10_BIT)
 {
 	esp_chip_info(&_mcuInfo);
 	esp_base_mac_addr_get(_macAdrress.data());
@@ -71,6 +72,9 @@ Hardware::Hardware() :	_gpio(),
 	//_gpio.Set(Gpio::GpioIndex::Gpio13);
 	gpio_set_level(GPIO_NUM_13, 1);
 	_buzzer.Init(6000);
+	_mosfetOutput.Init(23000);
+	_mosfetOutput.SetDutyCycle(50);
+	
 	_buzzer.SetDutyCycle(50);
 	vTaskDelay(100);
 	_buzzer.SetDutyCycle(0);

@@ -52,7 +52,8 @@ extern "C" void app_main(void)
 
 	while (1)
 	{
-		vTaskDelay(1000);
+		vTaskDelay(100);
+		uint8_t outputPower = ((float)pot.GetAnalogLevel() / 4095) * 100;
 		if (timeUpdate.IsTimeUp(1000))
 		{
 			timeUpdate.Reset();
@@ -62,10 +63,14 @@ extern "C" void app_main(void)
 											(switchTest.GetDigitalLevel()) ? "On" : "Off");
 			hardware->GetDisplay().print("Potenciometer: %lu\n", pot.GetAnalogLevel());
 			hardware->GetDisplay().print("Volt feedback: %lu\n", feedbackV.GetAnalogLevel());
-			hardware->GetDisplay().display();
+			
+			hardware->GetDisplay().print("Output Power: %d%%\n", outputPower);
+			hardware->GetDisplay().display();\
+
+			if (switchTest.GetDigitalLevel())
+				hardware->PlayBuzzer();
 		}
 
-		if (switchTest.GetDigitalLevel())
-			hardware->PlayBuzzer();
+		hardware->GetMosfetOutput().SetDutyCycle(outputPower);
 	}
 }

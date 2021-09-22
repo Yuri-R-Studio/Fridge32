@@ -7,8 +7,8 @@
 namespace Hal
 {
 
-Pwm::Pwm(Gpio *IoPins, Gpio::GpioIndex pin, ledc_channel_t channel, ledc_timer_t timer) : 
-		_gpio(IoPins), _pin(pin), _channel(channel), _timer(timer)
+Pwm::Pwm(Gpio *IoPins, Gpio::GpioIndex pin, ledc_channel_t channel, ledc_timer_t timer, ledc_timer_bit_t resolution) : 
+		_gpio(IoPins), _pin(pin), _channel(channel), _timer(timer), _resolution(resolution)
 {
 }
 
@@ -18,7 +18,7 @@ Pwm::~Pwm()
 
 void Pwm::Init(uint32_t frequency)
 {
-	ledc_timer.duty_resolution = LEDC_TIMER_13_BIT; // resolution of PWM duty
+	ledc_timer.duty_resolution = _resolution; // resolution of PWM duty
 	ledc_timer.freq_hz = frequency;                      // frequency of PWM signal
 	ledc_timer.speed_mode = LEDC_LOW_SPEED_MODE;           // timer mode
 	ledc_timer.timer_num = _timer;            // timer index
@@ -45,7 +45,7 @@ void Pwm::SetDutyCycle(uint8_t percentage)
 	if (percentage > 100)
 		percentage = 100;
 	
-	uint32_t timePosition = (MaxResolution * percentage) / 100;
+	uint32_t timePosition = (GetMaxResolution() * percentage) / 100;
 
 	ledc_set_duty(ledc_channel.speed_mode, ledc_channel.channel, timePosition);
 	ledc_update_duty(ledc_channel.speed_mode, ledc_channel.channel);

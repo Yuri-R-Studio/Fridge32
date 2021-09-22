@@ -56,6 +56,8 @@ public:
 	DeviceInput& GetDeviceInput() { return _deviceInput; }
 	Adafruit_SSD1306& GetDisplay() { return _display; }
 	Pwm &GetBuzzer() { return _buzzer; }
+	Pwm &GetMosfetOutput() { return _mosfetOutput; }
+	
 
 	inline void PlayBuzzer()
 	{
@@ -117,6 +119,7 @@ private:
 	Spi _spi;
 	Adafruit_SSD1306 _display;
 	Pwm _buzzer;
+	Pwm _mosfetOutput;
 };
 } // namespace Hal
 
