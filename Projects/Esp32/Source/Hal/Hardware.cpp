@@ -67,9 +67,9 @@ Hardware::Hardware() :	_gpio(),
 
 	_gpio.ConfigOutput(Gpio::GpioIndex::Gpio13, Gpio::OutputType::PullUp);
 	_gpio.Set(Gpio::GpioIndex::Gpio13);
-	// vTaskDelay(500);
-	_gpio.Reset(Gpio::GpioIndex::Gpio13);
-	// initializing display
+
+	//_gpio.Set(Gpio::GpioIndex::Gpio13);
+	gpio_set_level(GPIO_NUM_13, 1);
 	_buzzer.Init(6000);
 	_buzzer.SetDutyCycle(50);
 	vTaskDelay(100);

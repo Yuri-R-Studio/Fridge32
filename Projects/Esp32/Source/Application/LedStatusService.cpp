@@ -22,7 +22,7 @@ void LedStatusService::Run()
 		Delay(100);
 		if (ledOn)
 		{
-			if (ledTime.IsTimeUp(500))
+			if (ledTime.IsTimeUp(100))
 			{
 				ledTime.Reset();
 				ledOn = false;
@@ -31,7 +31,7 @@ void LedStatusService::Run()
 		}
 		else
 		{
-			if (ledTime.IsTimeUp(1000))
+			if (ledTime.IsTimeUp(2000))
 			{
 				ledTime.Reset();
 				ledOn = true;

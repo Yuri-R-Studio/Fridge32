@@ -36,32 +36,36 @@ bool Gpio::Get(GpioIndex index)
 void Gpio::Set(Gpio::GpioIndex index)
 {
 	uint8_t i = static_cast<uint8_t>(index);
-	if (pins[i].mode == Mode::Output)
-	{
+#ifdef DEBUG
+	if (pins[i].mode != Mode::Output)
+		printf("Gpio not configurate as output.\n");
+#endif
 		pins[i].state = State::High;
 		gpio_set_level(static_cast<gpio_num_t>(i), static_cast<uint8_t>(State::High));
-	}
 }
 
 void Gpio::Reset(Gpio::GpioIndex index)
 {
 	uint8_t i = static_cast<uint8_t>(index);
-	if (pins[i].mode == Mode::Output)
-	{
-		pins[i].state = State::Low;
-		gpio_set_level(static_cast<gpio_num_t>(i), static_cast<uint8_t>(State::Low));
-	}
+#ifdef DEBUG
+	if (pins[i].mode != Mode::Output)
+		printf("Gpio not configurate as output.\n");
+#endif
+	pins[i].state = State::Low;
+	gpio_set_level(static_cast<gpio_num_t>(i), static_cast<uint8_t>(State::Low));
 }
 
 void Gpio::Toggle(Gpio::GpioIndex index)
 {
 	uint8_t i = static_cast<uint8_t>(index);
 
-	if (pins[i].mode == Mode::Output)
-	{
-		pins[i].state = (pins[i].state == State::Low) ? State::High : State::Low;
-		gpio_set_level(static_cast<gpio_num_t>(i), static_cast<uint8_t>(pins[i].state));
-	}
+#ifdef DEBUG
+	if (pins[i].mode != Mode::Output)
+		printf("Gpio not configurate as output.\n");
+#endif
+	pins[i].state = (pins[i].state == State::Low) ? State::High : State::Low;
+	gpio_set_level(static_cast<gpio_num_t>(i), static_cast<uint8_t>(pins[i].state));
+
 }
 
 void Gpio::SetMode(Gpio::GpioIndex index, Gpio::Mode mode)
@@ -71,13 +75,32 @@ void Gpio::SetMode(Gpio::GpioIndex index, Gpio::Mode mode)
 #ifdef DEBUG
 	printf("Setting Gpio mode: %d\n", static_cast<uint8_t>(mode));
 #endif
-	gpio_set_direction(static_cast<gpio_num_t>(index), static_cast<gpio_mode_t>(mode));
+	gpio_config_t io_conf = {};
+    io_conf.pin_bit_mask = 1 << pin;
+
+	switch (mode)
+	{
+	case Gpio::Mode::Input:
+		io_conf.mode = GPIO_MODE_INPUT;
+		break;
+	case Gpio::Mode::Output:
+		io_conf.mode = GPIO_MODE_OUTPUT;
+		break;
+	case Gpio::Mode::OutputOpenDrain:
+		io_conf.mode = GPIO_MODE_OUTPUT_OD;
+		break;
+	
+	default:
+		return;
+	}
+    gpio_config(&io_conf);
 }
 
 Gpio::Mode Gpio::GetMode(GpioIndex index)
 {
 	return pins[static_cast<uint8_t>(index)].mode;
 }
+
 void Gpio::SetPull(Gpio::GpioIndex index, Gpio::Pull pull, bool KeepInSleepMode)
 {
 	uint8_t i = static_cast<uint8_t>(index);
