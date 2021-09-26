@@ -43,6 +43,7 @@ extern "C" void app_main(void)
 	Status::InputStatus& switchTest = StatusAgent::Instance()->GetInputStatusList().GetInput(Configuration::InputIndex::SwitchDefault);
 	Status::InputStatus& pot = StatusAgent::Instance()->GetInputStatusList().GetInput(Configuration::InputIndex::Potenciometer);
 	Status::InputStatus& feedbackV = StatusAgent::Instance()->GetInputStatusList().GetInput(Configuration::InputIndex::VoltageFeedBack);
+	Status::InputStatus& mosfetAnalog = StatusAgent::Instance()->GetInputStatusList().GetInput(Configuration::InputIndex::MosfetTemperature);
 	
  	printf("Hardware Tester for ESP32\n");
 	vTaskDelay(1000);
@@ -65,7 +66,8 @@ extern "C" void app_main(void)
 			hardware->GetDisplay().print("Volt feedback: %lu\n", feedbackV.GetAnalogLevel());
 			
 			hardware->GetDisplay().print("Output Power: %d%%\n", outputPower);
-			hardware->GetDisplay().display();\
+			hardware->GetDisplay().print("Mosfet Temp : %d C\n", mosfetAnalog.GetAnalogLevel());
+			hardware->GetDisplay().display();
 
 			if (switchTest.GetDigitalLevel())
 				hardware->PlayBuzzer();

@@ -51,7 +51,7 @@ public:
 private:
 	Gpio *_gpio;
 
-	static constexpr uint16_t DefaultVref = 1100; // ESP comoment: Use adc2_vref_to_gpio() to obtain a better estimate
+	static constexpr uint16_t DefaultVref = 3000; // ESP comoment: Use adc2_vref_to_gpio() to obtain a better estimate
 	// static constexpr uint8_t AverageSamples = 64;
 
 	enum class AdcSelection : uint8_t

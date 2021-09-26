@@ -16,6 +16,7 @@ namespace Configuration
     {
         SwitchDefault,
         Potenciometer,
-        VoltageFeedBack
+        VoltageFeedBack,
+        MosfetTemperature
     };
 } // namespace Common

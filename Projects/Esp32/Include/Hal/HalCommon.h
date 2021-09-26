@@ -15,7 +15,7 @@ namespace Hal
 using std::array;
 
 static constexpr uint8_t MaxDigitalInputs = 1;
-static constexpr uint8_t MaxAnalogInputs = 2;
+static constexpr uint8_t MaxAnalogInputs = 3;
 
 enum class DigitalInputIndex : uint8_t
 {
@@ -25,7 +25,8 @@ enum class DigitalInputIndex : uint8_t
 enum class AnalogInputIndex : uint8_t
 {
 	Potenciometer,
-    VoltageFeedBack
+    VoltageFeedBack,
+    MosfetTemperature,
 };
 
 enum class RmtProtocolSupported : uint8_t

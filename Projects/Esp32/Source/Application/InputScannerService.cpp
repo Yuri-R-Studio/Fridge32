@@ -41,7 +41,18 @@ void InputScannerService::Run()
 			SetAnalogLevel(deviceInput.GetAnalogInput(AnalogInputIndex::Potenciometer));	
 			
 		inputList.GetInput(Configuration::InputIndex::VoltageFeedBack).
-			SetAnalogLevel(deviceInput.GetAnalogInput(AnalogInputIndex::VoltageFeedBack));			
+			SetAnalogLevel(deviceInput.GetAnalogInput(AnalogInputIndex::VoltageFeedBack));
+
+		// Calculating Temperature Sensor
+		float mosfetSensor = deviceInput.GetAnalogInput(AnalogInputIndex::MosfetTemperature) * 1.09;
+		mosfetSensor = (mosfetSensor * 3.3) / (deviceInput.MaxResolution);
+		// printf("Count   sensor: %f\n", deviceInput.GetAnalogInput(AnalogInputIndex::MosfetTemperature)* 1.09);
+		// printf("Voltage sensor: %f\n", mosfetSensor);
+		mosfetSensor = ktySensor(mosfetSensor);
+
+		// printf("Temperature sensor: %f\n", mosfetSensor);
+		inputList.GetInput(Configuration::InputIndex::MosfetTemperature).
+			SetAnalogLevel(mosfetSensor);			
 	}
 }
 

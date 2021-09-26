@@ -13,6 +13,7 @@ class DeviceInput
 {
 
 public:
+	static const uint16_t MaxResolution = 4095;
 	uint16_t GetAnalogInput(AnalogInputIndex input, uint8_t averageSamples = 1);
 	DeviceInput(Gpio* IoPins, Adc* adc);
 	~DeviceInput();
@@ -29,7 +30,8 @@ private:
 	Gpio::GpioIndex analogIndex[MaxAnalogInputs] =
 	{
 		Gpio::GpioIndex::Gpio15,
-		Gpio::GpioIndex::Gpio4
+		Gpio::GpioIndex::Gpio4,
+		Gpio::GpioIndex::Gpio34,
 	};
 	
 	Adc::AdcIndex analogAdcIndex[MaxAnalogInputs] = {};
